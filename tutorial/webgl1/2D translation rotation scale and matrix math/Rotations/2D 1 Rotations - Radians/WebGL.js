@@ -13,14 +13,21 @@ function main() {
 	
 	uniform vec2 u_resolution;
 	uniform vec2 u_translation;
+	uniform vec2 u_rotation;
 
 	void main() {
 
+		//Rotate the position
+		vec2 rotatedPosition = vec2(
+			a_position.x * u_rotation.y + a_position.y * u_rotation.x,
+			a_position.y * u_rotation.y - a_position.x * u_rotation.x
+		);
+
 		// Add in translation
-		vec2 position = a_position + u_translation;
+		vec2 position = rotatedPosition + u_translation;
 
 		//pixels to range 0 to 1
-		vec2 zeroToOne = a_position /u_resolution;
+		vec2 zeroToOne = position /u_resolution;
 		//double the range to 0 to 2
 		vec2 zeroToTwo = zeroToOne * 2.0;
 		//offset so that it goes from -1 to 1
@@ -54,17 +61,21 @@ function main() {
 
 	var translationLocation = gl.getUniformLocation(program, "u_translation");
 
+	var rotationLocation = gl.getUniformLocation(program, "u_rotation");
+
 	var positionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 	setGeometry(gl);
 
-	var translation = [0, 0];
+	var translation = [130, 30];
+	var rotation = [-0.71 , 0.71];
+
 	var width = 100;
 	var height = 30;
     var color = [Math.random(),Math.random(),Math.random(), 1];
     
     drawScene();
-
+	
     function drawScene() {
 
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -78,8 +89,7 @@ function main() {
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     
         //setRectangle(gl, translation[0], translation[1], width, height);
-	
-		gl.uniform2fv(translationLocation, translation);
+		
 
         var size = 2;			// 2 components per interation
         var type = gl.FLOAT;    // 32bit float
@@ -91,7 +101,13 @@ function main() {
     
         gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
     
-        gl.uniform4fv(colorLocation, color);
+		gl.uniform4fv(colorLocation, color);
+		
+		//set the translation
+		gl.uniform2fv(translationLocation, translation);
+
+		//set the rotation
+		gl.uniform2fv(rotationLocation, rotation);
     
         var primitiveType =gl.TRIANGLES;
         var offset = 0;

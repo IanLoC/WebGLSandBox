@@ -20,7 +20,7 @@ function main() {
 		vec2 position = a_position + u_translation;
 
 		//pixels to range 0 to 1
-		vec2 zeroToOne = a_position /u_resolution;
+		vec2 zeroToOne = position /u_resolution;
 		//double the range to 0 to 2
 		vec2 zeroToTwo = zeroToOne * 2.0;
 		//offset so that it goes from -1 to 1
@@ -58,7 +58,7 @@ function main() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 	setGeometry(gl);
 
-	var translation = [0, 0];
+	var translation = [150, 10];
 	var width = 100;
 	var height = 30;
     var color = [Math.random(),Math.random(),Math.random(), 1];
