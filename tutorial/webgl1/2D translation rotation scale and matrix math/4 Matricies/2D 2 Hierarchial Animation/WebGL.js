@@ -83,7 +83,7 @@ function main() {
 	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 	setGeometry(gl);
 
-	var translation = [130,30];
+	var translation = [155,-20];
 	
 	//var rotation = [];
 	var angleDeg = -45;
@@ -91,7 +91,7 @@ function main() {
 	//rotation[0] = Math.sin(angleRad);
 	//rotation[1] = Math.cos(angleRad);
 
-	var scale = [0.2, 0.2];
+	var scale = [0.9, 0.9];
 
 	var width = 100;
 	var height = 30;
@@ -143,16 +143,21 @@ function main() {
 		var scaleMatrix = m3.scaling(scale[0],scale[1]);
 
 		//Multiply the matricies
-		var matrix = m3.multiply(translationMatrix, rotationMatrix);
-		matrix = m3.multiply(matrix, scaleMatrix);
+		var matrix = m3.identity;
 
-		//set the matrix
-		gl.uniformMatrix3fv(matrixLocation, false, matrix);
+		for(var i = 0; i < 45; ++i) {
+			matrix = m3.multiply(matrix, translationMatrix);
+			matrix = m3.multiply(matrix, rotationMatrix);
+			matrix = m3.multiply(matrix, scaleMatrix);
 		
-        var primitiveType =gl.TRIANGLES;
-        var offset = 0;
-        var count = 18;
-        gl.drawArrays(primitiveType, offset, count);
+			//set the matrix
+			gl.uniformMatrix3fv(matrixLocation, false, matrix);
+			
+			var primitiveType =gl.TRIANGLES;
+			var offset = 0;
+			var count = 18;
+			gl.drawArrays(primitiveType, offset, count);
+		}
     }
 }
 
@@ -341,5 +346,13 @@ var m3 = {
 			b20 * a02 + b21 * a12 + b22 * a22,
 		];
 	},
+	/**
+	 * Identity matrix
+	 * @example
+	 * 1 0 0
+	 * 0 1 0
+	 * 0 0 1
+	 */
+	identity: [1,0,0,0,1,0,0,0,1,],
 };
 main();
