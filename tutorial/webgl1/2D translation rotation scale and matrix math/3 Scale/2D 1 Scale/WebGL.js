@@ -14,13 +14,16 @@ function main() {
 	uniform vec2 u_resolution;
 	uniform vec2 u_translation;
 	uniform vec2 u_rotation;
+	uniform vec2 u_scale;
 
 	void main() {
+		//Scale the position
+		vec2 scaledPosition = a_position * u_scale;
 
 		//Rotate the position
 		vec2 rotatedPosition = vec2(
-			a_position.x * u_rotation.y + a_position.y * u_rotation.x,
-			a_position.y * u_rotation.y - a_position.x * u_rotation.x
+			scaledPosition.x * u_rotation.y + scaledPosition.y * u_rotation.x,
+			scaledPosition.y * u_rotation.y - scaledPosition.x * u_rotation.x
 		);
 
 		// Add in translation
@@ -63,6 +66,8 @@ function main() {
 
 	var rotationLocation = gl.getUniformLocation(program, "u_rotation");
 
+	var scaleLocation = gl.getUniformLocation(program, "u_scale");
+
 	var positionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 	setGeometry(gl);
@@ -74,6 +79,8 @@ function main() {
 	var angleRad = angleDeg * Math.PI / 180;
 	rotation[0] = Math.sin(angleRad);
 	rotation[1] = Math.cos(angleRad);
+
+	var scale = [0.2, 0.2];
 
 	var width = 100;
 	var height = 30;
@@ -113,6 +120,9 @@ function main() {
 
 		//set the rotation
 		gl.uniform2fv(rotationLocation, rotation);
+
+		//set the scale
+		gl.uniform2fv(scaleLocation, scale);
     
         var primitiveType =gl.TRIANGLES;
         var offset = 0;
