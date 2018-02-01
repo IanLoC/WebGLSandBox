@@ -68,7 +68,12 @@ function main() {
 	setGeometry(gl);
 
 	var translation = [130, 30];
-	var rotation = [-0.71 , 0.71];
+	
+	var rotation = [];
+	var angleDeg = -45;
+	var angleRad = angleDeg * Math.PI / 180;
+	rotation[0] = Math.sin(angleRad);
+	rotation[1] = Math.cos(angleRad);
 
 	var width = 100;
 	var height = 30;
